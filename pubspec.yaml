@@ -1,0 +1,40 @@
+name: proyecto
+description: "A new Flutter project."
+
+publish_to: 'none' # Prevents accidental publishing to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  particles_flutter: ^1.0.1
+  image_picker: ^1.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Sección para los assets
+  assets:
+    - assets/flores.jpg # Imagen utilizada en el Drawer
+    - assets/illustration_dogs.jpg
+    - assets/illustration_login.jpg
+    - assets/illustration_signup.jpg
+    - assets/fondo_huellitas.jpg
+    - assets/comida_hipoalergenica.jpg # Nueva imagen para la comida hipoalergénica
+    - assets/cuidado_dientes.jpg # Nueva imagen para cuidado de dientes
+    - assets/ejercicio_perro.jpg # Nueva imagen para ejercicio de perro
+    - assets/vacunacion_perro.jpg # Nueva imagen para vacunación
+    - assets/bano_perro.jpg # Nueva imagen para baño de perro
+    - assets/perrito.jpg
+    - assets/fondo_familia.jpg
