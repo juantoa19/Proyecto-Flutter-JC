@@ -64,7 +64,7 @@ class _SusMascotasState extends State<SusMascotas> {
         'color': _color,
         'sexo': _sexo,
         'microchip': _microchip,
-        'imagen': imagenUrl.isNotEmpty ? imagenUrl : 'assets/perrito.jpg', // URL de imagen
+        'imagen': imagenUrl.isNotEmpty ? imagenUrl : 'assets/salchicha.jpg', // URL de imagen
       };
 
       try {

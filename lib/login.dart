@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -24,23 +25,23 @@ class _LoginState extends State<Login> {
     if (value == null || value.isEmpty) {
       return 'Por favor ingresa una contraseña';
     }
-    if (value.length < 7) {
-      return 'La contraseña debe tener al menos 7 caracteres';
-    }
     return null;
   }
 
-  // Este método se puede utilizar para verificar las credenciales del usuario
-  void _login() {
+  // Iniciar sesión
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      // Aquí puedes agregar la lógica para autenticar al usuario,
-      // por ejemplo, con tu propio sistema de autenticación.
-      Navigator.pushReplacementNamed(context, '/mainScreen'); // Ruta a tu pantalla principal
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+        Navigator.pushReplacementNamed(context, '/mainScreen'); // Ruta a la pantalla principal
+      } catch (e) {
+        print('Error de inicio de sesión: $e');
+        // Agregar lógica para manejar errores de inicio de sesión
+      }
     }
-  }
-
-  void _navigateToRegister() {
-    Navigator.pushNamed(context, '/registro'); // Asegúrate de tener la ruta '/registro' configurada
   }
 
   @override
@@ -61,7 +62,7 @@ class _LoginState extends State<Login> {
                 color: Colors.black45,
                 child: Center(
                   child: Text(
-                    'Bienvenido Querido Usuario',
+                    'Bienvenido Querido Usuario a nuestra pagina Bienestar Canino 🐾',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
@@ -74,47 +75,56 @@ class _LoginState extends State<Login> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Login', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                    Text('Login', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black)),
                     SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email)),
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.purple),
+                        ),
+                      ),
                       validator: _validateEmail,
                     ),
                     SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock)),
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.purple),
+                        ),
+                      ),
                       validator: _validatePassword,
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 32),
                     Center(
                       child: ElevatedButton(
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
+                          backgroundColor: Colors.pink,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 120),
                         ),
                         child: Text('Login', style: TextStyle(fontSize: 18)),
                       ),
                     ),
-                    const SizedBox(height: 16.0),
+                    SizedBox(height: 16),
                     Center(
-                      child: OutlinedButton.icon(
-                        onPressed: _navigateToRegister,
-                        icon: const Icon(Icons.person_add, color: Colors.purple),
-                        label: const Text(
-                          '¿No tienes cuenta? Regístrate aquí',
-                          style: TextStyle(color: Colors.purple),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.purple),
-                          padding: const EdgeInsets.symmetric(vertical: 14.0),
-                          textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/registro'); // Ruta al registro
+                        },
+                        child: Text(
+                          '¿No tienes cuenta? Regístrate',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.purple,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ),

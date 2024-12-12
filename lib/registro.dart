@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Registro extends StatefulWidget {
@@ -50,14 +52,29 @@ class _RegistroState extends State<Registro> {
     return null;
   }
 
-  // Método de registro (se puede agregar tu propio sistema de registro aquí)
-  void _register() {
+  // Registro del usuario en Firebase
+  Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
-      // Aquí puedes agregar tu lógica de registro, como el almacenamiento de usuario en una base de datos local
-      // o en un sistema de autenticación personalizado.
+      try {
+        // Crear usuario en Firebase Auth
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
 
-      // Navegar al login
-      Navigator.pushReplacementNamed(context, '/login');
+        // Guardar datos del usuario en Firestore
+        FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+          'username': _usernameController.text,
+          'email': _emailController.text,
+          'createdAt': Timestamp.now(),
+        });
+
+        // Navegar al login
+        Navigator.pushReplacementNamed(context, '/login');
+      } catch (e) {
+        print('Error al registrar: $e');
+        // Puedes agregar una notificación de error al usuario aquí
+      }
     }
   }
 
@@ -87,7 +104,7 @@ class _RegistroState extends State<Registro> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Sign Up', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                    Text('Registrate', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                     SizedBox(height: 8),
                     TextFormField(
                       controller: _usernameController,
@@ -111,7 +128,7 @@ class _RegistroState extends State<Registro> {
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: true,
-                      decoration: InputDecoration(labelText: 'Confirm Password', prefixIcon: Icon(Icons.lock_outline)),
+                      decoration: InputDecoration(labelText: 'Confirm Password', prefixIcon: Icon(Icons.lock_outline),),
                       validator: _validateConfirmPassword,
                     ),
                     SizedBox(height: 32),
